@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "190295224625",
+    "project_id": "mynotes-rudra",
+    "storage_bucket": "mynotes-rudra.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190295224625:android:4fd7c70e6d9d493dc70010",
+        "android_client_info": {
+          "package_name": "com.rudra.mynotes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcwy4btsYNr5flrCNgLi_1TwVAqve03P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
