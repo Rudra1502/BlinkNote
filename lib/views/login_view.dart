@@ -34,62 +34,52 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login Page'),
+        title: const Text('Login'),
         backgroundColor: Colors.blue,
       ),
-      body: Center(
-        child: FutureBuilder(
-          future: Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform,
+      body: Column(
+        children: [
+          TextField(
+            controller: _email,
+            autocorrect: false,
+            obscureText: false,
+            enableSuggestions: true,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(hintText: 'Enter your email'),
           ),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                return Column(
-                  children: [
-                    TextField(
-                      controller: _email,
-                      autocorrect: false,
-                      obscureText: false,
-                      enableSuggestions: true,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter your email'),
-                    ),
-                    TextField(
-                      controller: _password,
-                      autocorrect: false,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      decoration: const InputDecoration(
-                          hintText: 'Enter your password'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        await Firebase.initializeApp(
-                          options: DefaultFirebaseOptions.currentPlatform,
-                        );
-                        final email = _email.text;
-                        final password = _password.text;
-                        try {
-                          final userCredential = await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: email, password: password);
-                          print('User logged in successfully');
-                          print(userCredential);
-                        } on FirebaseAuthException catch (e) {
-                          print(e.code);
-                        }
-                      },
-                      child: const Text('Login'),
-                    ),
-                  ],
-                );
-              default:
-                return const Text('loading');
-            }
-          },
-        ),
+          TextField(
+            controller: _password,
+            autocorrect: false,
+            obscureText: true,
+            enableSuggestions: false,
+            decoration: const InputDecoration(hintText: 'Enter your password'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await Firebase.initializeApp(
+                options: DefaultFirebaseOptions.currentPlatform,
+              );
+              final email = _email.text;
+              final password = _password.text;
+              try {
+                final userCredential = await FirebaseAuth.instance
+                    .signInWithEmailAndPassword(
+                        email: email, password: password);
+                print('User logged in successfully');
+                print(userCredential);
+              } on FirebaseAuthException catch (e) {
+                print(e.code);
+              }
+            },
+            child: const Text('Login'),
+          ),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+              },
+              child: const Text('Not registered yet? Register here'))
+        ],
       ),
     );
   }
