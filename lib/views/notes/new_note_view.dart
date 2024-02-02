@@ -54,7 +54,7 @@ class _NewNoteViewState extends State<NewNoteView> {
   void _deleteNoteIfTextIsEmpty() async {
     final note = _note;
     if (_textController.text.isEmpty && note != null) {
-      await _notesService.deleteNote(id: note.id);
+       await _notesService.deleteNote(id: note.id);
     }
   }
 
@@ -86,7 +86,7 @@ class _NewNoteViewState extends State<NewNoteView> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              _note = snapshot.data;
+              _note = snapshot.data ;
               _setupTextControllerListener();
               return TextField(
                 controller: _textController,
@@ -96,6 +96,7 @@ class _NewNoteViewState extends State<NewNoteView> {
                   hintText: 'Start typing your note here...',
                 ),
               );
+
             default:
               return const CircularProgressIndicator();
           }

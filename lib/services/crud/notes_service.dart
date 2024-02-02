@@ -11,20 +11,21 @@ class NotesService {
   List<DatabaseNote> _notes = [];
 
   static final NotesService _shared = NotesService._sharedInstance();
-  NotesService._sharedInstance();
+
+  NotesService._sharedInstance() {
+    _notesStreamController = StreamController.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
+
   factory NotesService() => _shared;
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
-  Future<void> _cacheNotes() async {
-    final allNotes = await getAllNotes();
-    _notes = allNotes.toList();
-    _notesStreamController.add(_notes);
-  }
-
-  Future<DatabaseUser> getOrCreateUSer({required String email}) async {
+  Future<DatabaseUser> getOrCreateUser({required String email}) async {
     try {
       final user = await getUser(email: email);
       return user;
@@ -34,6 +35,12 @@ class NotesService {
     } catch (e) {
       rethrow;
     }
+  }
+  
+  Future<void> _cacheNotes() async {
+    final allNotes = await getAllNotes();
+    _notes = allNotes.toList();
+    _notesStreamController.add(_notes);
   }
 
   Future<DatabaseNote> updateNote(
@@ -125,18 +132,18 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
 
-    final dbUser = getUser(email: owner.email);
+    final dbUser = await getUser(email: owner.email);
 
     if (dbUser != owner) {
       throw CouldNotFindUser();
     }
 
-    final text = '';
+    const text = '';
     final noteID = await db.insert(
       noteTable,
       {
         userIdColumn: owner.id,
-        text: text,
+        textColumn: text,
         isSyncedWithCloudColumn: 1,
       },
     );
@@ -188,7 +195,7 @@ class NotesService {
     }
 
     final userID = await db.insert(userTable, {
-      emailColumn: [email.toLowerCase()]
+      emailColumn: email.toLowerCase(),
     });
 
     return DatabaseUser(
@@ -255,7 +262,7 @@ class NotesService {
       // create note table
       await db.execute(createNoteTable);
       await _cacheNotes();
-    } on MissingPlatformDirectoryException catch (_) {
+    } on MissingPlatformDirectoryException {
       throw UnableToGetDirectoryPathException();
     }
   }
