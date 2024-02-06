@@ -344,6 +344,7 @@ class DatabaseNote {
   int get hashCode => id.hashCode;
 }
 
+
 const dbName = 'notes.db';
 const noteTable = 'note';
 const userTable = 'user';

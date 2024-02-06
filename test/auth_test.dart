@@ -117,7 +117,11 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     if (email == 'foo@bar.com') throw InvalidCredentialAuthException();
     if (password == 'foobar') throw InvalidCredentialAuthException();
-    const user = AuthUser(isEmailVerified: false, email: 'foo@bar.com');
+    const user = AuthUser(
+      isEmailVerified: false,
+      email: 'foo@bar.com',
+      id: 'my_id',
+    );
     _user = user;
     return Future.value(user);
   }
@@ -134,7 +138,11 @@ class MockAuthProvider implements AuthProvider {
   Future<void> sendEmailVerification() async {
     if (!isInitialized) throw NotInitializedException();
     if (_user == null) throw UserNotLoggedInAuthException();
-    const newUser = AuthUser(isEmailVerified: true, email: 'foo@bar.com');
+    const newUser = AuthUser(
+      isEmailVerified: true,
+      email: 'foo@bar.com',
+      id: 'my_id',
+    );
     _user = newUser;
   }
 }
