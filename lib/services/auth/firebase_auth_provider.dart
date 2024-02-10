@@ -65,7 +65,7 @@ class FirebaseAuthProvider implements AuthProvider {
       } else {
         throw UserNotLoggedInAuthException();
       }
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       throw InvalidCredentialAuthException();
     } catch (_) {
       throw GenericAuthException();
